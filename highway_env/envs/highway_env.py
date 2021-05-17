@@ -81,6 +81,11 @@ class HighwayEnv(AbstractEnv):
         :param action: the last action performed
         :return: the corresponding reward
         """
+        
+        # Add new code for assignment 3
+        # Additional term to penalize changing lanes
+        # File roundabout_env.py used as reference
+
         lane_change = action == 0 or action == 2
 
         neighbours = self.road.network.all_side_lanes(self.vehicle.lane_index)
@@ -91,10 +96,10 @@ class HighwayEnv(AbstractEnv):
             + self.config["collision_reward"] * self.vehicle.crashed \
             + self.config["right_lane_reward"] * lane / max(len(neighbours) - 1, 1) \
             + self.config["high_speed_reward"] * np.clip(scaled_speed, 0, 1) \
-            + self.config["lane_change_reward"] * lane_change
+            + self.config["lane_change_reward"] * lane_change # Add new line
 
         reward = utils.lmap(reward,
-                          [self.config["collision_reward"] + self.config["lane_change_reward"],
+                          [self.config["collision_reward"] + self.config["lane_change_reward"], # Modify line
                            self.config["high_speed_reward"] + self.config["right_lane_reward"]],
                           [0, 1])
         reward = 0 if not self.vehicle.on_road else reward
